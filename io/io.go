@@ -3,6 +3,7 @@ package io
 import (
 	"bufio"
 	"encoding/binary"
+	"net"
 )
 
 // func readUShort(buf []byte) uint16 {
@@ -15,6 +16,13 @@ import (
 
 // 	return short
 // }
+
+func Init() (rw bufio.ReadWriter) {
+	ln, _ := net.Listen("tcp", ":8081")
+	conn, _ := ln.Accept()
+	rw = *bufio.NewReadWriter(bufio.NewReader(conn), bufio.NewWriter(conn))
+	return
+}
 
 func ReadString(r *bufio.Reader) string {
 	len := ReadByte(r)
